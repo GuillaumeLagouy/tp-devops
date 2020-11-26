@@ -1,5 +1,6 @@
-#Lead Tech TP2
-##I. Convention de coding
+# Lead Tech TP2
+## I. Convention de coding
+
 Améliorations des conventions de code :
 *   Si le contexte est suffisamment précis le nom des fichiers doivent rester simple.
 
