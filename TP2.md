@@ -57,3 +57,4 @@ Coût de l'infrastructure sur AWS : 1200 € / mois
 
 ### NoSQL
 On pourrait avoir besoin d'une base de donnée NoSQL pour stocker les images sous forme de blob.
+On pourrait également l'utiliser pour cacher des requêtes ou créer un historique de recherche.
