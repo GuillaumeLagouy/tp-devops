@@ -44,11 +44,16 @@ Coût de l'infrastructure sur AWS : 1200 € / mois
 * Pour l'instant les projets _pilote_ et _account_ sont dans une seule et même machine à l'avenir ils auront besoin d'une machine dédiée pour des soucis de scalabilité.
 * Passer d'une infrastructure monolithique à une infrastructure micro-service. Cela permettra d'isoler les différents processus et de tout passer en API. (🚧 en cours)
 * Utiliser un framework front (ex: VueJs) car en APIsant nos services on pourra remplacer le site front vieillissant et les différents outils clients par une infrastructure front plus moderne qui consommera les APIs.
-* 
-* 
+* Se débarrasser de FMP (File Maker Pro) créer un outil pour le remplacer.
+* Créer un environnement spécifique pour les intégrateurs et graphistes avec un workflow simplifié avec la possibilité de :
+    * mettre en production pour tester leur UI/UX auprès d'utilisateur.
+    * générer une librairie de composants afin de créer un design system.
 
 ### c) Service
 
-* 4 développeurs dont un lead développeur
-* 1 scrum master
-* 1 administrateur réseau
+* 4 développeurs dont un lead développeur (environ 2.000 € et 3.000 € pour le lead dev)
+* 1 scrum master (2.000 €)
+* 1 administrateur réseau (2.000 €)
+
+### NoSQL
+On pourrait avoir besoin d'une base de donnée NoSQL pour stocker les images sous forme de blob.
