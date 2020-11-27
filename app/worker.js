@@ -1,5 +1,7 @@
 // Imports the Google Cloud client library
 const { PubSub } = require('@google-cloud/pubsub');
+const { Storage } = require('@google-cloud/storage')
+const moment = require('moment');
 const request = require('request');
 const ZipStream = require('zip-stream');
 const photoModel = require('./photo_model');
@@ -7,8 +9,8 @@ const env = require('../project-id-9307823999230114798-b3157dde6a00');
 
 async function quickstart(
   projectId = 'project-id-9307823999230114798', // Your Google Cloud Platform project ID
-  topicName = 'sebastien', // Name for the new topic to create
-  subscriptionName = 'sebastien' // Name for the new subscription to create
+  topicName = 'guillaume', // Name for the new topic to create
+  subscriptionName = 'guillaume' // Name for the new subscription to create
 ) {
   const credentials = {
     projectId: env.project_id,
@@ -33,24 +35,63 @@ async function quickstart(
       console.log(`\tAttributes: ${message.attributes}`);
       messageCount += 1;
 
-/*      const zip = new ZipStream();
-      // zip.pipe(res);
-      const photos = await photoModel.getFlickrPhotos(message.data.tags);
+      const zip = new ZipStream();
+      let storage = new Storage(credentials);
+
+      const filename = `guillaume_${Date.now().toString()}.zip`;
+
+      const file = await storage
+        .bucket("dmii2bucket")
+        .file(filename)
+      ;
+
+      const stream = file.createWriteStream({
+        metadata : {
+          contentType: zip.mimeType,
+          cacheControle: 'private'
+        },
+        resumable: false
+      });
+      zip.pipe(stream);
+      const photos = await photoModel.getFlickrPhotos(JSON.parse(message.data).tags, message.data.tagmode);
+      photos.splice(0, 10);
+      const datas = photos.map((p, i) => ({name: `index-${i}.jpg`, image: p.media.m}))
 
       function addNextFile() {
-        const elem = photos.shift();
-        const stream = request(elem.media.m);
-        zip.entry(stream, { name: elem.title }, err => {
+
+        const {image, name} = datas.shift();
+        const stream = request(image);
+        zip.entry(stream, { name }, err => {
           if (err)
             throw err;
-          if (photos.length > 0)
+          if (datas.length > 0)
             addNextFile();
-          else
+          else {
             zip.finalize();
+            getSignedUrl();
+          }
         });
       }
 
-      addNextFile();*/
+      async function getSignedUrl() {
+        const options = {
+          action: 'read',
+          expires: '03-09-2021'//moment().add(2, 'days').unix() * 1000
+        };
+        try {
+          const signedUrls = await storage
+            .bucket("dmii2bucket")
+            .file(filename)
+            .getSignedUrl(options);
+
+          console.log(`URL: ${signedUrls}`)
+        } catch(e) {
+          console.log(e)
+        }
+      }
+
+      addNextFile();
+
 
       // "Ack" (acknowledge receipt of) the message
       message.ack();

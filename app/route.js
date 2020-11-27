@@ -39,7 +39,7 @@ function route(app) {
         return res.status(500).send({ error });
       });
   });
-  
+
   app.post('/zip', async (req, res) => {
     const tags = req.query.tags;
     const tagmode = req.query.tagmode;
@@ -51,9 +51,11 @@ function route(app) {
       credentials: env
     };
     const pubsub = new PubSub(credentials);
-    const topic = pubsub.topic('sebastien');
+    const topic = pubsub.topic('guillaume');
     topic.publish(Buffer.from(JSON.stringify({ tags, tagmode })));
-    res.status(200)
+
+    res.status(200);
+    res.send("ok");
   });
 }
 
